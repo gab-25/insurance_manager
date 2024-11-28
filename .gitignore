@@ -31,5 +31,5 @@
 *.out
 *.app
 
-data.csv
+clients.csv
 build/

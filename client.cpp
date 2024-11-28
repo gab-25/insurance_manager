@@ -1,32 +1,42 @@
-#include <string>
+#include "interaction.cpp"
 
-using namespace std;
+class Client
+{
+private:
+    std::string name;
+    std::string surname;
+    std::string email;
+    std::string telephone;
+    std::vector<Interaction> interactions;
 
-class Client {
-    private:
-        int id;
-    public:
-        string name;
-        string surname;
-        string email;
-        
-        Client(int x) {
-            id = x;
-        };
+public:
+    Client(std::string _name, std::string _surname, std::string _email, std::string _telephone)
+        : name(_name), surname(_surname), email(_email), telephone(_telephone) {}
 
-        void edit() {
-            cout << "Inserire nome: ";
-            cin >> name;
-            cout << "Inserire cognome: ";
-            cin >> surname;
-            cout << "Inserire email: ";
-            cin >> email;
-        };
+    void addInteraction(const Interaction &interaction)
+    {
+        interactions.push_back(interaction);
+    }
 
-        void print() {
-            cout << "cliente ID: " << id << endl;
-            cout << "nome: " << name << endl;
-            cout << "cognome: " << surname << endl;
-            cout << "email: " << email << endl;
-        };
+    // Getter e setter
+    std::string getName() const { return name; }
+    std::string getSurname() const { return surname; }
+    std::string getEmail() const { return email; }
+    std::string getTelephone() const { return telephone; }
+    std::vector<Interaction> getInteractions() const { return interactions; }
+
+    void setName(const std::string &_name) { name = _name; }
+    void setSurname(const std::string &_surname) { surname = _surname; }
+    void setEmail(const std::string &_email) { email = _email; }
+    void setTelephone(const std::string &_telephone) { telephone = _telephone; }
+
+    std::string toString() const
+    {
+        return "Nome: " + name + " " + surname + ", Email: " + email + ", Telefono: " + telephone;
+    }
+
+    std::string toCSV() const
+    {
+        return name + "," + surname + "," + email + "," + telephone;
+    }
 };
