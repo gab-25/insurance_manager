@@ -11,9 +11,9 @@ public:
     Interaction(std::string _tipo, std::string _date, std::string _descrizione)
         : type(_tipo), date(_date), description(_descrizione) {}
 
-    std::string getTipo() const { return type; }
+    std::string getType() const { return type; }
     std::string getDate() const { return date; }
-    std::string getDescrizione() const { return description; }
+    std::string getDescription() const { return description; }
 
     std::string toString() const
     {

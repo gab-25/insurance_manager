@@ -1,3 +1,5 @@
+#include <string>
+#include <vector>
 #include "interaction.cpp"
 
 class Client
@@ -37,6 +39,11 @@ public:
 
     std::string toCSV() const
     {
-        return name + "," + surname + "," + email + "," + telephone;
+        std::string result = "";
+        for (const Interaction &interaction : interactions)
+        {
+            result += name + "," + surname + "," + email + "," + telephone + "," + interaction.getType() + "," + interaction.getDate() + "," + interaction.getDescription() + "\n";
+        }
+        return result;
     }
 };

@@ -3,8 +3,9 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include "client.cpp"
 #include <limits>
+#include <algorithm>
+#include "client.cpp"
 
 class CRM
 {
@@ -138,12 +139,16 @@ public:
         std::string search;
         std::cout << "Inserisci nome o cognome da cercare: ";
         std::cin >> search;
+        std::transform(search.begin(), search.end(), search.begin(), ::tolower);
 
         bool finded = false;
         for (const auto &client : clients)
         {
-            if (client.getName().find(search) != std::string::npos ||
-                client.getSurname().find(search) != std::string::npos)
+            std::string name = client.getName();
+            std::string surname = client.getSurname();
+            std::transform(name.begin(), name.end(), name.begin(), ::tolower);
+            std::transform(surname.begin(), surname.end(), surname.begin(), ::tolower);
+            if (name.find(search) != std::string::npos || surname.find(search) != std::string::npos)
             {
                 std::cout << client.toString() << std::endl;
                 finded = true;
@@ -228,12 +233,6 @@ public:
         for (const auto &client : clients)
         {
             file << client.toCSV() << "\n";
-            for (const auto &interaction : client.getInteractions())
-            {
-                file << client.getName() << "," << client.getSurname() << ","
-                     << interaction.getTipo() << "," << interaction.getData() << ","
-                     << interaction.getDescrizione() << "\n";
-            }
         }
 
         file.close();
@@ -253,36 +252,44 @@ public:
         std::string row;
         while (std::getline(file, row))
         {
-            std::istringstream ss(row);
-            std::string name, surname, email, telephone, type, data, description;
-
-            if (std::getline(ss, name, ',') &&
-                std::getline(ss, surname, ',') &&
-                std::getline(ss, email, ',') &&
-                std::getline(ss, telephone))
+            if (!row.empty())
             {
-                if (std::getline(file, row))
+                std::istringstream ss(row);
+                std::string name, surname, email, telephone, type, date, description;
+                std::getline(ss, name, ',');
+                std::getline(ss, surname, ',');
+                std::getline(ss, email, ',');
+                std::getline(ss, telephone, ',');
+                std::getline(ss, type, ',');
+                std::getline(ss, date, ',');
+                std::getline(ss, description);
+
+                bool existClient = false;
+                for (Client &client : clients)
                 {
-                    std::istringstream interaction_ss(row);
-
-                    if (std::getline(interaction_ss, name, ',') &&
-                        std::getline(interaction_ss, surname, ',') &&
-                        std::getline(interaction_ss, type, ',') &&
-                        std::getline(interaction_ss, data, ',') &&
-                        std::getline(interaction_ss, description))
+                    if (client.getName() == name && client.getSurname() == surname && client.getEmail() == email && !type.empty())
                     {
-
-                        Client newClient(name, surname, email, telephone);
-                        newClient.addInteraction(Interaction(type, data, description));
-                        clients.push_back(newClient);
+                        existClient = true;
+                        Interaction interaction(type, date, description);
+                        client.addInteraction(interaction);
+                        break;
                     }
+                }
+
+                if (!existClient)
+                {
+                    Client newClient(name, surname, email, telephone);
+                    if (!type.empty())
+                    {
+                        newClient.addInteraction(Interaction(type, date, description));
+                    }
+                    clients.push_back(newClient);
                 }
             }
         }
 
         file.close();
         std::cout << "Dati caricati con successo!" << std::endl;
-        listClients();
     }
 
     void menu()
