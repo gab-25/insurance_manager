@@ -1,5 +1,5 @@
 # insurance_manager
-Progetto modulo 2 del master AI Engineering di Profession AI
+Progetto modulo: Programmazione ad ale prestazioni con C++, del master AI Engineering di Profession AI
 
 ## CRM per impresa di assicurazioni
 InsuraPro Solutions si dedica a migliorare l'efficienza e la qualità del servizio clienti per le imprese di assicurazioni, sviluppando un avanzato sistema di Customer Relationship Management (CRM) che facilita la gestione delle informazioni sui clienti e delle loro interazioni con l'azienda.
